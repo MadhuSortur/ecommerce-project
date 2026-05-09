@@ -1,0 +1,528 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body{
+    background:
+    linear-gradient(
+    135deg,
+    #fdfaf4,
+    #f3e7e9
+    );
+
+    font-family:Arial,sans-serif;
+    color:#222;
+}
+
+/* PAGE */
+.return-container{
+    max-width:1250px;
+    margin:50px auto;
+    padding:0 30px;
+}
+
+/* HEADER */
+.page-top{
+    margin-bottom:35px;
+}
+
+.return-title{
+    font-size:42px;
+    font-weight:700;
+    color:#8b1c2e;
+    margin-bottom:10px;
+}
+
+.return-subtitle{
+    color:#666;
+    font-size:16px;
+    line-height:1.7;
+    max-width:700px;
+}
+
+/* LAYOUT */
+.return-layout{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+    align-items:start;
+}
+
+/* LEFT */
+.left-section{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+/* CARD */
+.card-box{
+    background:white;
+    border-radius:22px;
+    padding:28px;
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.05);
+
+    border:1px solid #f1f1f1;
+}
+
+/* PRODUCT */
+.product-box{
+    display:flex;
+    gap:24px;
+    align-items:center;
+}
+
+/* IMAGE */
+.product-box img{
+    width:130px;
+    height:130px;
+    object-fit:contain;
+    border-radius:18px;
+    background:#fafafa;
+    border:1px solid #eee;
+    padding:10px;
+}
+
+/* PRODUCT INFO */
+.product-name{
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.product-price{
+    font-size:22px;
+    font-weight:700;
+    color:#8b1c2e;
+    margin-bottom:14px;
+}
+
+.product-meta{
+    color:#777;
+    font-size:15px;
+    line-height:1.8;
+}
+
+/* SECTION TITLE */
+.section-title{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:24px;
+}
+
+/* LABEL */
+label{
+    display:block;
+    margin-bottom:10px;
+    
+    font-weight:600;
+    color:#333;
+}
+
+/* INPUTS */
+.select-box,
+.file-input,
+textarea{
+    width:100%;
+    border:1px solid #ddd;
+    border-radius:14px;
+    padding:16px;
+    font-size:15px;
+    transition:0.3s;
+    background:white;
+}
+
+.select-box{
+    margin-bottom:28px;
+}
+
+.file-input{
+    margin-bottom:25px;
+    background:#fafafa;
+    cursor:pointer;
+}
+
+textarea{
+    height:150px;
+    resize:none;
+    margin-bottom:30px;
+}
+
+/* FOCUS */
+.select-box:focus,
+textarea:focus{
+    outline:none;
+    border-color:#8b1c2e;
+    box-shadow:0 0 0 4px rgba(139,28,46,0.08);
+}
+
+/* BUTTON */
+.submit-btn{
+    width:100%;
+    border:none;
+    background:#8b1c2e;
+    color:white;
+    padding:18px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.submit-btn:hover{
+    background:#6d1524;
+    transform:translateY(-2px);
+}
+
+/* RIGHT SIDE */
+.summary-box{
+    position:sticky;
+    top:20px;
+}
+
+/* STATUS */
+.status-badge{
+    display:inline-block;
+    background:#fff1f3;
+    color:#8b1c2e;
+    padding:8px 14px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:18px;
+}
+
+/* INFO ROW */
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:16px;
+    padding-bottom:16px;
+    border-bottom:1px solid #f1f1f1;
+}
+
+.info-row:last-child{
+    border-bottom:none;
+    margin-bottom:0;
+    padding-bottom:0;
+}
+
+.info-label{
+    color:#777;
+}
+
+.info-value{
+    font-weight:600;
+}
+
+/* TIMELINE */
+.timeline{
+    margin-top:25px;
+}
+
+.timeline-item{
+    display:flex;
+    gap:14px;
+    margin-bottom:22px;
+    align-items: center;
+}
+
+.timeline-dot{
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#8b1c2e;
+    flex-shrink: 0;
+}
+
+.timeline-content h4{
+    font-size:15px;
+    margin-bottom:0;
+}
+
+.timeline-content p{
+    font-size:14px;
+    color:#777;
+    line-height:1.5;
+    margin-top: 4px;
+}
+
+/* MOBILE */
+@media(max-width:950px){
+
+    .return-layout{
+        grid-template-columns:1fr;
+    }
+
+    .product-box{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .product-box img{
+        width:100%;
+        height:280px;
+    }
+
+    .return-title{
+        font-size:34px;
+    }
+
+}
+
+</style>
+
+<div class="return-container">
+<div class="page-top">
+
+    <div class="return-title">
+        Return Product
+    </div>
+
+    <div class="return-subtitle">
+        We’re sorry your order didn’t work out.
+        Submit a return request and our team will review it quickly.
+    </div>
+
+</div>
+
+<div class="return-layout">
+
+    <!-- LEFT -->
+    <div class="left-section">
+
+        <!-- PRODUCT -->
+        <div class="card-box">
+
+            <div class="product-box">
+
+                <img src="{{ item.product.image.url }}">
+
+                <div>
+
+                    <div class="product-name">
+                        {{ item.product.name }}
+                    </div>
+
+                    <div class="product-price">
+                        ₹{{ item.price }}
+                    </div>
+
+                    <div class="product-meta">
+
+                        Quantity: {{ item.quantity }}
+
+                        <br>
+
+                        Order ID:
+                        #{{ item.order.id }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FORM -->
+        <div class="card-box">
+
+            <div class="section-title">
+                Return Details
+            </div>
+
+            <form method="POST"
+                  enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <label>
+                    Select Return Reason
+                </label>
+
+                <select name="reason"
+                        class="select-box">
+
+                    <option value="Damaged">
+                        Damaged Product
+                    </option>
+
+                    <option value="Wrong Product">
+                        Wrong Product Sent
+                    </option>
+
+                    <option value="Size Issue">
+                        Size / Fit Issue
+                    </option>
+
+                    <option value="Quality Issue">
+                        Quality Not Good
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+                <label>
+                    Upload Product Image
+                </label>
+
+                <input
+                    type="file"
+                    name="return_image"
+                    class="file-input"
+                >
+
+                <label>
+                    Additional Details
+                </label>
+
+                <textarea
+                    name="description"
+                    placeholder="Describe the issue with the product..."
+                ></textarea>
+
+                <button type="submit"
+                        class="submit-btn">
+
+                    Submit Return Request
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="summary-box">
+
+        <div class="card-box">
+
+            <div class="status-badge">
+                Return Support
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Return Window
+                </div>
+
+                <div class="info-value">
+                    7 Days
+                </div>
+
+            </div>
+
+        
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Pickup
+                </div>
+
+                <div class="info-value">
+                    Free Pickup
+                </div>
+
+            </div>
+
+            <!-- TIMELINE -->
+            <div class="timeline">
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+                            Submit Request
+                        </h4>
+
+                        <p>
+                            Fill return details and submit request.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+                            Verification
+                        </h4>
+
+                        <p>
+                            Our team reviews your request.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+                            Pickup Scheduled
+                        </h4>
+
+                        <p>
+                            Delivery partner collects your item.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+                            Refund Processed
+                        </h4>
+
+                        <p>
+                            Refund sent to original payment method.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+{% endblock %}

@@ -30,6 +30,7 @@ urlpatterns = [
     path('place-order/', views.place_order, name='place_order'),
     path('payment/', views.payment, name='payment'),
     path('success/', views.success, name='success'),
+    path('return-order/<int:item_id>/', views.return_order, name='return_order'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

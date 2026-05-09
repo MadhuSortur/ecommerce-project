@@ -173,3 +173,48 @@ class Review(models.Model):
     class Meta:
         unique_together = ['product', 'user']  # ⭐ NEW
 
+
+
+# ================= REVIEW =================
+class ReturnRequest(models.Model):
+
+    RETURN_STATUS = (
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+        ('Completed', 'Completed'),
+    )
+
+    REASON_CHOICES = (
+        ('Damaged', 'Damaged'),
+        ('Wrong Product', 'Wrong Product'),
+        ('Size Issue', 'Size Issue'),
+        ('Quality Issue', 'Quality Issue'),
+        ('Other', 'Other'),
+    )
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    reason = models.CharField(max_length=100, choices=REASON_CHOICES)
+
+    description = models.TextField(blank=True, null=True)
+
+    status = models.CharField(
+        max_length=20,
+        choices=RETURN_STATUS,
+        default='Pending'
+    )
+
+    return_image = models.ImageField(
+        upload_to='return_images/',
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Return #{self.id}"

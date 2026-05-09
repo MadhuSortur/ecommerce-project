@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import *
-from .models import Product, ProductVariant, ProductImage, Order, OrderItem, Profile, Wishlist
-
+from .models import Product, ProductVariant, ProductImage, Order, OrderItem, Profile, Wishlist 
+from .models import ReturnRequest
+from django.utils.html import format_html
 # Variant inside Product
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
@@ -40,3 +41,27 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):
     list_display = ['user', 'product']
+
+
+@admin.register(ReturnRequest)
+class ReturnRequestAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id',
+        'user',
+        'order',
+        'reason',
+        'status',
+        'return_image_preview',
+        'created_at'
+    )
+
+    def return_image_preview(self, obj):
+
+        if obj.return_image:
+            return format_html(
+                '<img src="{}" width="70" height="70" style="border-radius:8px;" />',
+                obj.return_image.url
+            )
+
+        return "No Image"

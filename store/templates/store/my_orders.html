@@ -181,6 +181,7 @@ body {
     <div class="filter-btn" onclick="filterOrders('progress')">In Progress</div>
     <div class="filter-btn" onclick="filterOrders('delivered')">Delivered</div>
     <div class="filter-btn" onclick="filterOrders('cancelled')">Cancelled</div>
+    <div class="filter-btn" onclick="filterOrders('returned')">Returned</div>
 </div>
 
 {% for order in orders %}
@@ -222,6 +223,25 @@ body {
 
             <div class="price">₹{{ order.total_price }}</div>
 
+            {% for return in order.returnrequest_set.all %}
+
+            <div class="return-status" style="
+            margin-top:10px;
+            padding:7px 12px;
+            background:#fff3cd;
+            color:#856404;
+            border-radius:10px;
+            font-size:14px;
+            display:inline-block;
+            font-weight:600;
+            ">
+
+                Return Status: {{ return.status }}
+
+            </div>
+
+            {% endfor %}
+
         </div>
 
     </div>
@@ -233,6 +253,40 @@ body {
         <button class="cancel-btn" data-id="{{ order.id }}" onclick="cancelOrder(this)">
             Cancel Order
         </button>
+        {% endif %}
+
+        {% if order.status == 'Delivered' %}
+
+            {% now "U" as current_timestamp %}
+
+            {% if order.returnrequest_set.exists %}
+
+            <button class="cancel-btn" style="
+            background:#e8f5e9;
+            color:#1b5e20;
+            cursor:default;
+            ">
+                Return Requested
+            </button>
+
+            {% elif order.created_at|timesince|slice:":2" > "7" %}
+
+            <button class="cancel-btn" style="
+            background:#eeeeee;
+            color:#777;
+            cursor:not-allowed;
+            ">
+                Return Window Closed
+            </button>
+
+            {% else %}
+
+            <a href="{% url 'return_order' items.0.id %}" class="cancel-btn">
+                Return Order
+            </a>
+
+            {% endif %}
+
         {% endif %}
 
         <a href="{% url 'track_order' order.id %}" class="arrow">
@@ -281,6 +335,16 @@ function filterOrders(type){
         }
         else if(type === 'cancelled'){
             card.style.display = (status === 'cancelled') ? 'flex' : 'none';
+        }
+        else if(type === 'returned'){
+
+            if(card.querySelector('.return-status')){
+                card.style.display = 'flex';
+            }
+            else{
+                card.style.display = 'none';
+            }
+
         }
     });
 }

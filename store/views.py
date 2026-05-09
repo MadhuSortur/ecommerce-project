@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .models import Product,ProductImage,ProductVariant
 from .models import Order,OrderItem
-
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
@@ -14,6 +13,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import Review
 from .models import Address
+from .models import ReturnRequest
+from datetime import timedelta
+from django.utils import timezone
 
 
 # ================= LANDING =================
@@ -645,4 +647,46 @@ def payment(request):
         'total': total,
         'address_id': address_id,
         'cart': cart
+    })
+
+# ================= RETURN_ORDER =================
+
+@login_required
+def return_order(request, item_id):
+
+    order_item = OrderItem.objects.get(id=item_id)
+
+    delivery_date = order_item.order.created_at
+
+    last_return_date = delivery_date + timedelta(days=7)
+
+    if timezone.now() > last_return_date:
+        return redirect('my_orders')
+
+    already_requested = ReturnRequest.objects.filter(
+        order_item=order_item
+    ).exists()
+
+    if already_requested:
+        return redirect('my_orders')
+
+    if request.method == "POST":
+
+        reason = request.POST.get('reason')
+        return_image = request.FILES.get('return_image')
+        description = request.POST.get('description')
+
+        ReturnRequest.objects.create(
+            order=order_item.order,
+            order_item=order_item,
+            user=request.user,
+            reason=reason,
+            return_image=return_image,
+            description=description
+        )
+
+        return redirect('my_orders')
+
+    return render(request, 'store/return_order.html', {
+        'item': order_item
     })

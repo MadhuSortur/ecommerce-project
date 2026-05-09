@@ -93,13 +93,105 @@ body {
     color: #3d141a;
 }
 
+/* RETURN BOX */
+
+.return-box{
+    background:white;
+    padding:30px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    margin-top:30px;
+}
+
+.return-title{
+    font-size:22px;
+    font-weight:500;
+    margin-bottom:25px;
+    color:#0c0c0c;
+}
+
+.return-info{
+    margin-bottom:35px;
+    line-height:1.8;
+}
+
+/* RETURN TIMELINE */
+
+.return-timeline{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+    margin-top:30px;
+}
+
+.return-timeline::before{
+    content:'';
+    position:absolute;
+    top:20px;
+    left:0;
+    width:100%;
+    height:3px;
+    background:#ddd;
+    z-index:0;
+}
+
+.return-step{
+    text-align:center;
+    position:relative;
+    z-index:1;
+}
+
+.return-circle{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#ddd;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.return-step.active .return-circle{
+    background:#8b1c2e;
+}
+
+.return-label{
+    margin-top:10px;
+    font-size:13px;
+    font-weight:600;
+}
+
 </style>
 
 
 <div class="container">
 <div class="card">
 
-<div class="title">📦 Order Tracking</div>
+    <div class="title" style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    ">
+
+        <img 
+            src="https://cdn-icons-png.flaticon.com/128/5161/5161308.png"
+            alt=""
+            style="
+            width:28px;
+            height:28px;
+            object-fit:contain;
+            "
+        >
+
+        <span>
+            Order Tracking
+        </span>
+
+    </div>
 
 <div class="info">
     <b>Order ID:</b> {{ order.id }} <br>
@@ -142,5 +234,126 @@ body {
 
 </div>
 </div>
+
+{% if order.returnrequest_set.exists %}
+
+{% with return=order.returnrequest_set.first %}
+
+<div class="container">
+
+<div class="return-box">
+
+    <div class="return-title" style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    ">
+
+        <img 
+            src="https://cdn-icons-png.flaticon.com/128/6734/6734859.png"
+            style="
+            width:28px;
+            height:28px;
+            object-fit:contain;
+            "
+        >
+
+        <span>
+            Return Tracking
+        </span>
+
+    </div>
+
+    <div class="return-info">
+
+        <b>Reason:</b>
+        {{ return.reason }}
+
+        <br>
+
+        <b>Return Status:</b>
+        {{ return.status }}
+
+    </div>
+
+    <div class="return-timeline">
+
+        <!-- REQUESTED -->
+
+        <div class="return-step active">
+
+            <div class="return-circle">
+                ✓
+            </div>
+
+            <div class="return-label">
+                Requested
+            </div>
+
+        </div>
+
+        <!-- APPROVED -->
+
+        <div class="return-step
+        {% if return.status == 'Approved' or return.status == 'Picked' or return.status == 'Refunded' %}
+        active
+        {% endif %}
+        ">
+
+            <div class="return-circle">
+                ✓
+            </div>
+
+            <div class="return-label">
+                Approved
+            </div>
+
+        </div>
+
+        <!-- PICKED -->
+
+        <div class="return-step
+        {% if return.status == 'Picked' or return.status == 'Refunded' %}
+        active
+        {% endif %}
+        ">
+
+            <div class="return-circle">
+                ✓
+            </div>
+
+            <div class="return-label">
+                Picked Up
+            </div>
+
+        </div>
+
+        <!-- REFUNDED -->
+
+        <div class="return-step
+        {% if return.status == 'Refunded' %}
+        active
+        {% endif %}
+        ">
+
+            <div class="return-circle">
+                ✓
+            </div>
+
+            <div class="return-label">
+                Refunded
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endwith %}
+
+{% endif %}
 
 {% endblock %}
