@@ -179,7 +179,7 @@ class Review(models.Model):
 class ReturnRequest(models.Model):
 
     RETURN_STATUS = (
-        ('Pending', 'Pending'),
+        ('Pending','Pending'),
         ('Approved', 'Approved'),
         ('Rejected', 'Rejected'),
         ('Completed', 'Completed'),
